@@ -13,21 +13,25 @@ class Seq2Seq(nn.Module):
         self.encoder = nn.LSTM(embed_size, hidden_size, batch_first=True)
         self.decoder = nn.LSTM(embed_size, hidden_size, batch_first=True)
         self.linear = nn.Linear(hidden_size, vocab_size)
+        self.embed_size = embed_size
+        self.hidden_size = hidden_size
         
-    def encode(self, input):
+    def encode(self, input, input_lens):
         """
         Args:
             input: input tensor of shape (batch_size, seq_length)
+            input_lens: list containing length of each sample, (batch_size)
         
         Returns:
             h: last hidden state of shape (num_layer*bidirectional, batch_size, hidden_size)
             c: last cell state of shape (num_layer*bidirectional, batch_size, hidden_size)
         """
-        embedded = self.embed(input)          # (batch_size, seq_length, embed_size)
-        _, (h, c) = self.encoder(embedded)   # (1, batch_size, hidden_size)
+        embedded = self.embed(input)          
+        pack_embedded = pack(embedded, input_lens, True) # (padded - batch_size & seq_length, embed_size)
+        _, (h, c) = self.encoder(pack_embedded)   # (1, batch_size, hidden_size)
         return h, c
     
-    def decode(self, input, h, c):
+    def decode(self, target, output_lens, h, c):
         """
         Args:
             input: decoder input (teacher forcing) of shape (batch_size, seq_length)
@@ -37,11 +41,11 @@ class Seq2Seq(nn.Module):
         Returns:
             output: decoder outputs of shape (batch_size, seq_length, vocab_size)
         """
-        embedded = self.embed(input)
-        output, _ = self.decoder(embedded, (h, c))
+        embedded = self.embed(target)          
+        pack_embedded = pack(embedded, output_lens, True) # (padded - batch_size & seq_length, embed_size)
+        output, _ = self.decoder(pack_embedded, (h, c)) # (padded - batch_size & seq_length, hidden_size)
         
         # Linear transform
-        seq_length = output.size(1)
-        output = output.contiguous().view(-1, output.size(2))
-        output = self.linear(output).view(-1, seq_length, self.vocab_size)  # (batch_size, seq_length, vocab_size) 
+        output = self.linear(output[0]) # (batch_size, vocab_size)        
+        
         return output
