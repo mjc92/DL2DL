@@ -9,7 +9,7 @@ Sample usage case
 src_root = '/home/irteam/users/mjchoi/github/DL2DL/data/task1/source/'
 trg_root = '/home/irteam/users/mjchoi/github/DL2DL/data/task1/target/'
 data_loader = get_loader(src_root, trg_root, 2)
-src,trg = dat_iter.next()
+src,trg, src_len, trg_len = dat_iter.next()
 
 """
 
@@ -40,7 +40,7 @@ class TextFolder(data.Dataset):
         # change lists of words to lists of idxs
         src_tokens = self.wordlist2idxlist(src_tokens)
         trg_tokens = self.wordlist2idxlist(trg_tokens)
-        return src_tokens, trg_tokens
+        return torch.LongTensor(src_tokens), torch.LongTensor(trg_tokens)
     
     def __len__(self):
         return len(self.source_filenames)
@@ -74,7 +74,7 @@ class TextFolder(data.Dataset):
 #         while(len(out)<self.max_len):
 #             out.append('<PAD>')
 #         return out[:self.max_len]
-        return torch.LongTensor(get_vocab(out))
+        return out
 
 def collate_fn(data):
     # Sort function: sorts in decreasing order by the length of the items in the right (targets)
@@ -96,7 +96,7 @@ def collate_fn(data):
 def get_loader(src_root, trg_root, batch_size, num_workers=2):
     dataset = TextFolder(src_root, trg_root)
     data_loader = data.DataLoader(dataset=dataset,
-                                 batch_size=1,
+                                 batch_size=batch_size,
                                  shuffle=True,
                                  num_workers=num_workers,
                                  collate_fn=collate_fn)
