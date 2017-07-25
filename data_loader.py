@@ -2,6 +2,7 @@ import torch
 import os
 from torch.utils import data
 
+
 """
 Sample usage case
 
@@ -9,7 +10,6 @@ src_root = '/home/irteam/users/mjchoi/github/DL2DL/data/task1/source/'
 trg_root = '/home/irteam/users/mjchoi/github/DL2DL/data/task1/target/'
 data_loader = get_loader(src_root, trg_root, 2)
 src,trg = dat_iter.next()
-
 
 """
 
@@ -22,6 +22,7 @@ class TextFolder(data.Dataset):
         self.max_len = 100
         self.source_filenames = os.listdir(src_root)
         self.target_filenames = os.listdir(trg_root)
+        self.load_dict()
     
     def __getitem__(self, index):
         source_filename = self.source_filenames[index]
@@ -31,9 +32,14 @@ class TextFolder(data.Dataset):
             src = f.read()
         with open(os.path.join(self.trg_root,target_filename)) as f:
             trg = f.read()
+            
+        # tokenize source and target
         src_tokens = self.tokenize(self.preprocess(src))
         trg_tokens = self.tokenize(self.preprocess(trg),trg=True)
-#         print(src_tokens)
+        
+        # change lists of words to lists of idxs
+        src_tokens = self.wordlist2idxlist(src_tokens)
+        trg_tokens = self.wordlist2idxlist(trg_tokens)
         return src_tokens, trg_tokens
     
     def __len__(self):
@@ -44,6 +50,22 @@ class TextFolder(data.Dataset):
         string = string.replace(')',' ) ').replace(',',' , ').replace('nn.','nn . ')
         string = string.replace('  ',' ')
         return string.strip()
+    
+    def load_dict(self):
+        # load dictionary
+        import json
+        with open('data/word2id.json') as f:
+            txt = f.read()
+            self.w2i = json.loads(txt)
+            
+    def wordlist2idxlist(self,wordlist):
+        out = []
+        for word in wordlist:
+            if word in self.w2i:
+                out.append(self.w2i[word])
+            else:
+                out.append(self.w2i['<UNK>'])
+        return out
 
     def tokenize(self, string, trg=False):
         out = string.split(' ')
@@ -55,6 +77,8 @@ class TextFolder(data.Dataset):
         return torch.LongTensor(get_vocab(out))
 
 def collate_fn(data):
+    # Sort function: sorts in decreasing order by the length of the items in the right (targets)
+    data.sort(key=lambda x: len(x[1]), reverse=True)
     sources, targets = zip(*data)
     source_lengths = [len(x) for x in sources]
     target_lengths = [len(x) for x in targets]
@@ -67,7 +91,7 @@ def collate_fn(data):
         targets_out[i,:target_end] = targets[i]
 #     prin(len(sources))
 #     print(sources)
-    return sources_out, targets_out
+    return sources_out, targets_out, source_lengths, target_lengths
 
 def get_loader(src_root, trg_root, batch_size, num_workers=2):
     dataset = TextFolder(src_root, trg_root)
