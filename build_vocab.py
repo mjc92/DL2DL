@@ -32,13 +32,14 @@ def build_word2id(root, min_word_count):
     word2id['<PAD>'] = 0
     word2id['<SOS>'] = 1
     word2id['<EOS>'] = 2
+    word2id['<UNK>'] = 3
     
     # if word frequency is less than 'min_word_count', then the word is discarded
     words = [word for word, count in counter.items() if count >= min_word_count]
     
     # add the words to the word2id dictionary
     for i, word in enumerate(words):
-        word2id[word] = i + 3
+        word2id[word] = i + 4
     
     return word2id
 
