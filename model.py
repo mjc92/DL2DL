@@ -49,3 +49,23 @@ class Seq2Seq(nn.Module):
         output = self.linear(output[0]) # (batch_size, vocab_size)        
         
         return output
+    
+    def sample(self, input, h, c, max_length):
+        """Samples sentence for given image features (Greedy search).
+        
+        Args:
+            input: start tokens of shape (batch_size, 1)
+            h: last hidden state from the encoder
+            c: last cell state from the encoder
+            max_length: maximum sampling length
+        """
+        sampled_ids = []
+        input = self.embed(input) 
+        for i in range(max_length):                               
+            hiddens, (h, c) = self.decoder(input, (h, c))         # (batch_size, 1, hidden_size), 
+            outputs = self.linear(hiddens.squeeze(1))             # (batch_size, vocab_size)
+            _, predicted = outputs.max(1)
+            sampled_ids.append(predicted)
+            input = self.embed(predicted.unsqueeze(1))           # (batch_size, 1, embed_size)
+        sampled_ids = torch.stack(sampled_ids, dim=1)             # (batch_size, 120)
+        return sampled_ids

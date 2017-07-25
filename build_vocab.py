@@ -21,7 +21,7 @@ def build_word2id(root, min_word_count):
         with open(os.path.join(root, filename), 'r') as f:
             sentence = f.read()
             sentence = sentence.replace(',', ' , ').replace('(', ' ( ').replace(')', ' ) ').replace('.', ' . ')
-            tokens = sentence.replace('\n', ' \n ').replace('\t', ' \t ').split()
+            tokens = sentence.replace('\n', ' \n ').replace('\t', ' \t ').split(' ')
             counter.update(tokens)
 
         if i % 1000 == 0:
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--root', type=str, default='./data/task1/source/')
     parser.add_argument('--output_path', type=str, default='./data/word2id.json')
-    parser.add_argument('--min_word_count', type=int, default=4)
+    parser.add_argument('--min_word_count', type=int, default=1)
     config = parser.parse_args()
     print (config)
     main(config)
