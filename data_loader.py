@@ -21,7 +21,9 @@ class TextFolder(data.Dataset):
         self.trg_root = trg_root
         self.max_len = 100
         self.source_filenames = os.listdir(src_root)
+        self.source_filenames.sort(key=lambda x: int(x[:-4]), reverse=False)
         self.target_filenames = os.listdir(trg_root)
+        self.target_filenames.sort(key=lambda x: int(x[:-4]), reverse=False)
         self.load_dict()
     
     def __getitem__(self, index):
@@ -40,7 +42,7 @@ class TextFolder(data.Dataset):
         # change lists of words to lists of idxs
         src_tokens = self.wordlist2idxlist(src_tokens)
         trg_tokens = self.wordlist2idxlist(trg_tokens)
-        return torch.LongTensor(src_tokens), torch.LongTensor(trg_tokens)
+        return torch.LongTensor(src_tokens), torch.LongTensor(trg_tokens), int(source_filename[:-4])
     
     def __len__(self):
         return len(self.source_filenames)
@@ -79,7 +81,7 @@ class TextFolder(data.Dataset):
 def collate_fn(data):
     # Sort function: sorts in decreasing order by the length of the items in the right (targets)
     data.sort(key=lambda x: len(x[1]), reverse=True)
-    sources, targets = zip(*data)
+    sources, targets, names = zip(*data)
     source_lengths = [len(x) for x in sources]
     target_lengths = [len(x) for x in targets]
     sources_out = torch.zeros(len(sources),max(source_lengths)).long()
@@ -91,7 +93,7 @@ def collate_fn(data):
         targets_out[i,:target_end] = targets[i]
 #     prin(len(sources))
 #     print(sources)
-    return sources_out, targets_out, source_lengths, target_lengths
+    return sources_out, targets_out, source_lengths, target_lengths, names
 
 def get_loader(src_root, trg_root, batch_size, num_workers=2, shuffle=True):
     dataset = TextFolder(src_root, trg_root)
