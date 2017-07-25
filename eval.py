@@ -32,6 +32,8 @@ def to_var(x, volatile=False):
 
 outputs = []
 filenames = []
+total_samples = 0
+correct_samples = 0
 for i, (sources, targets, source_lengths, target_lengths, names) in enumerate(data_loader):
     
     sources = to_var(sources, volatile=True)
@@ -47,9 +49,21 @@ for i, (sources, targets, source_lengths, target_lengths, names) in enumerate(da
     outputs.append(output)
     filenames.extend(names)
     
+    # Compute accuracy
+    mask = (targets_out != 0).float()
+    correct = (output[:,:mask.size(1)].data.cpu() == targets_out).float() * mask  
+    # (batch_size, max_length)
+    mask_sum = torch.sum(mask, dim=1)                            
+    # (batch_size)
+    correct_sum =torch.sum(correct, dim=1)
+    score = (mask_sum == correct_sum).numpy().sum()
+    total_samples+=batch_size
+    correct_samples+=score
+print('Total score: %d/%d' %(correct_samples,total_samples))
+    
 predicted = torch.cat(outputs, dim=0)
 predicted = predicted.cpu().data.numpy()
-    
+
 num_data = predicted.shape[0]
 
 sampled = []

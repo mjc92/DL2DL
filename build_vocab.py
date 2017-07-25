@@ -23,6 +23,7 @@ def build_word2id(root, min_word_count):
             sentence = sentence.replace('\n',' \n ').replace('\t',' \t ').replace('(',' ( ')
             sentence = sentence.replace(')',' ) ').replace(',',' , ').replace('nn.','nn . ')
             sentence = sentence.replace('  ',' ')
+            tokens = sentence.split(' ')
             counter.update(tokens)
 
         if i % 1000 == 0:

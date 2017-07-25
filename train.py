@@ -6,36 +6,40 @@ from torch.autograd import Variable
 from torch.nn.utils.rnn import pack_padded_sequence as pack
 from torch.nn.utils.rnn import pad_packed_sequence as unpack
 from data_loader import get_loader
+from packages.functions import reset_grad, to_var
+import argparse
 
+
+parser = argparse.ArgumentParser()
+# parser.add_argument("--vocab_size",type=int, default=100, help='vocab_size')
+parser.add_argument("--src_root",type=str, default='./data/task1/source/', help='directory for source data')
+parser.add_argument("--trg_root",type=str, default='./data/task1/target/', help='directory for target data')
+parser.add_argument("--num_epochs",type=int, default=10, help='number of epochs')
+parser.add_argument("--log_step",type=int, default=100, help='number of steps to write on log')
+parser.add_argument("--batch_size",type=int, default=10, help='minibatch size')
+parser.add_argument("--embed_size",type=int, default=128, help='embedding size')
+parser.add_argument("--hidden_size",type=int, default=512, help='hidden size')
+parser.add_argument("--lr",type=float, default=0.001, help='learning rate')
+args = parser.parse_args()
 
 with open('./data/word2id.json', 'r') as f:
     word2id = json.load(f)
     
-src_root = './data/task1/source/'
-trg_root = './data/task1/target/'
-data_loader = get_loader(src_root, trg_root, 10, num_workers=2)
+data_loader = get_loader(args.src_root, args.trg_root, args.batch_size, num_workers=2)
 
 vocab_size = len(word2id)
-model = Seq2Seq(vocab_size)
-
-def to_var(x):
-    if torch.cuda.is_available():
-        x = x.cuda()
-    return Variable(x)
-
-def reset_grad():
-    model.zero_grad()
+model = Seq2Seq(vocab_size=vocab_size, embed_size=args.embed_size, hidden_size=args.hidden_size)
 
 model.cuda()
 
-log_step = 100
-num_epochs = 10
-lr = 0.001
+log_step = args.log_step
+num_epochs = args.num_epochs
+
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
 
 for e in range(num_epochs):
-    for i, (sources, targets, source_lengths, target_lengths) in enumerate(data_loader):
+    for i, (sources, targets, source_lengths, target_lengths,_) in enumerate(data_loader):
         
         # convert tensor to variable
         sources = to_var(sources)
@@ -52,7 +56,7 @@ for e in range(num_epochs):
         loss = criterion(output, targets_out)
         
         # Backward + Optimize
-        reset_grad()
+        reset_grad(model)
         loss.backward()
         optimizer.step()
         
