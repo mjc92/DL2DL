@@ -20,8 +20,9 @@ def build_word2id(root, min_word_count):
     for i, filename in enumerate(filenames):
         with open(os.path.join(root, filename), 'r') as f:
             sentence = f.read()
-            sentence = sentence.replace(',', ' , ').replace('(', ' ( ').replace(')', ' ) ').replace('.', ' . ')
-            tokens = sentence.replace('\n', ' \n ').replace('\t', ' \t ').split(' ')
+            sentence = sentence.replace('\n',' \n ').replace('\t',' \t ').replace('(',' ( ')
+            sentence = sentence.replace(')',' ) ').replace(',',' , ').replace('nn.','nn . ')
+            sentence = sentence.replace('  ',' ')
             counter.update(tokens)
 
         if i % 1000 == 0:
