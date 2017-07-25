@@ -93,11 +93,11 @@ def collate_fn(data):
 #     print(sources)
     return sources_out, targets_out, source_lengths, target_lengths
 
-def get_loader(src_root, trg_root, batch_size, num_workers=2):
+def get_loader(src_root, trg_root, batch_size, num_workers=2, shuffle=True):
     dataset = TextFolder(src_root, trg_root)
     data_loader = data.DataLoader(dataset=dataset,
                                  batch_size=batch_size,
-                                 shuffle=True,
+                                 shuffle=shuffle,
                                  num_workers=num_workers,
                                  collate_fn=collate_fn)
     return data_loader
