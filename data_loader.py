@@ -77,6 +77,8 @@ class TextFolder(data.Dataset):
         return torch.LongTensor(get_vocab(out))
 
 def collate_fn(data):
+    # Sort function: sorts in decreasing order by the length of the items in the right (targets)
+    data.sort(key=lambda x: len(x[1]), reverse=True)
     sources, targets = zip(*data)
     source_lengths = [len(x) for x in sources]
     target_lengths = [len(x) for x in targets]
