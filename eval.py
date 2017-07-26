@@ -2,7 +2,7 @@ import torch
 import json
 import numpy as np
 import os
-from model import Seq2Seq
+from models.seq2seq import Seq2Seq
 from torch.autograd import Variable
 from data_loader import get_loader
 

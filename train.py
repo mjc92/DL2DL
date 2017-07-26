@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import json
-from model import Seq2Seq
+from models.seq2seq import Seq2Seq
 from torch.autograd import Variable
 from torch.nn.utils.rnn import pack_padded_sequence as pack
 from torch.nn.utils.rnn import pad_packed_sequence as unpack
