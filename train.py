@@ -5,15 +5,19 @@ from models.seq2seq import Seq2Seq
 from torch.autograd import Variable
 from torch.nn.utils.rnn import pack_padded_sequence as pack
 from torch.nn.utils.rnn import pad_packed_sequence as unpack
+# from data_loader import get_loader
 from data_loader import get_loader
 from packages.functions import reset_grad, to_var
 import argparse
+import os
 
 
 parser = argparse.ArgumentParser()
 # parser.add_argument("--vocab_size",type=int, default=100, help='vocab_size')
 parser.add_argument("--src_root",type=str, default='./data/task1/source/', help='directory for source data')
 parser.add_argument("--trg_root",type=str, default='./data/task1/target/', help='directory for target data')
+parser.add_argument("--saved_dir",type=str, default='./data/', help='directory for saved data')
+parser.add_argument("--model_name",type=str, default='model.pth', help='file name of saved model')
 parser.add_argument("--num_epochs",type=int, default=10, help='number of epochs')
 parser.add_argument("--log_step",type=int, default=100, help='number of steps to write on log')
 parser.add_argument("--batch_size",type=int, default=10, help='minibatch size')
@@ -64,4 +68,4 @@ for e in range(num_epochs):
             print ("Epoch [{}/{}], Step [{}/{}], loss: {:.4}" \
                    .format(e+1, num_epochs, i+1, len(data_loader), loss.data[0]))
 
-torch.save(model.state_dict(), './data/model.pth')
+torch.save(model.state_dict(), os.path.join(args.saved_dir,args.model_name))

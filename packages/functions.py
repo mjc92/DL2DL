@@ -22,6 +22,4 @@ def extract(text): # extracts model structure from source code
     numbers = [x for i,x in enumerate(numbers) if i%2==0]
     activation = list(set(activation))[0]
     result = line.split('(')[0].strip()
-    if 'Linear' in result:
-        result = None
-    return numbers, activation, result
+    return ' '.join(numbers), activation, result

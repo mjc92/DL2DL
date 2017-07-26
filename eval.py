@@ -1,4 +1,5 @@
 import torch
+import argparse
 import json
 import numpy as np
 import os
@@ -6,24 +7,36 @@ from models.seq2seq import Seq2Seq
 from torch.autograd import Variable
 from data_loader import get_loader
 
+parser = argparse.ArgumentParser()
+# parser.add_argument("--vocab_size",type=int, default=100, help='vocab_size')
+parser.add_argument("--src_root",type=str, default='./data/task1/source/', help='directory for source data')
+parser.add_argument("--trg_root",type=str, default='./data/task1/target/', help='directory for target data')
+parser.add_argument("--sample_dir",type=str, default='./data/task1/predicted', help='directory save sampled data')
+parser.add_argument("--saved_dir",type=str, default='./data/', help='directory for saved data')
+parser.add_argument("--model_name",type=str, default='model.pth', help='file name of saved model')
+parser.add_argument("--num_epochs",type=int, default=10, help='number of epochs')
+parser.add_argument("--log_step",type=int, default=100, help='number of steps to write on log')
+parser.add_argument("--batch_size",type=int, default=10, help='minibatch size')
+parser.add_argument("--embed_size",type=int, default=128, help='embedding size')
+parser.add_argument("--hidden_size",type=int, default=512, help='hidden size')
+parser.add_argument("--lr",type=float, default=0.001, help='learning rate')
+args = parser.parse_args()
+
 # sample path
-sample_path = './data/task1/predicted'
-if not os.path.exists(sample_path):
-    os.makedirs(sample_path)
+if not os.path.exists(args.sample_dir):
+    os.makedirs(args.sample_dir)
 
 # load vocabulary file and loader
 with open('./data/word2id.json', 'r') as f:
     word2id = json.load(f)
 id2word = {i: w for w, i in word2id.items()}
-src_root = './data/task1/source/'
-trg_root = './data/task1/target/'
-data_loader = get_loader(src_root, trg_root, 10, num_workers=2, shuffle=False)
+data_loader = get_loader(args.src_root, args.trg_root, args.batch_size, 
+                         num_workers=2, shuffle=False)
 
-model_save_path = './data/model.pth'
 vocab_size = len(word2id)
 model = Seq2Seq(vocab_size)
 model.cuda()
-model.load_state_dict(torch.load(model_save_path))
+model.load_state_dict(torch.load(os.path.join(args.saved_dir,args.model_name)))
 
 def to_var(x, volatile=False):
     if torch.cuda.is_available():
@@ -76,5 +89,5 @@ for i, sentence in enumerate(predicted):
         tmp += token
     sampled.append(tmp)
 
-    with open(os.path.join(sample_path, '{:05}.txt'.format(filenames[i])), 'w') as f:
+    with open(os.path.join(args.sample_dir, '{:05}.txt'.format(filenames[i])), 'w') as f:
         f.write(tmp)
