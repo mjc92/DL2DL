@@ -1,0 +1,11 @@
+net = nn.Sequential(
+	nn.Linear(in_dim, 200),
+	nn.ELU(),
+	nn.Linear(200, 200),
+	nn.ELU(),
+	nn.Linear(200, 200),
+	nn.ELU(),
+	nn.Linear(200, 200),
+	nn.ELU(),
+	nn.Linear(200, out_dim),
+	nn.Softmax())

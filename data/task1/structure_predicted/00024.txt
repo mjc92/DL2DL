@@ -1,0 +1,2 @@
+main=nn.Sequential(),
+	nn.Softmax())

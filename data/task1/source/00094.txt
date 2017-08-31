@@ -1,0 +1,7 @@
+network = nn.Sequential(
+	nn.Linear(x_dim, 200),
+	nn.PReLU(),
+	nn.Linear(400, 400),
+	nn.PReLU(),
+	nn.Linear(400, out_dim),
+	nn.Sigmoid())

@@ -1,0 +1,7 @@
+main = nn.Sequential(
+	nn.Linear(input_dim, 16),
+	nn.ReLU(),
+	nn.Linear(32, 32),
+	nn.ReLU(),
+	nn.Linear(32, out_dim),
+	nn.Sigmoid())

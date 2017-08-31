@@ -1,0 +1,2 @@
+net=nn.Sequential(),
+	nn.Linear(100,out_dim))

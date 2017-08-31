@@ -1,0 +1,9 @@
+net = nn.Sequential(
+	nn.Linear(in_dim, 32),
+	nn.LeakyReLU(0.2),
+	nn.Linear(32, 32),
+	nn.LeakyReLU(0.2),
+	nn.Linear(32, 32),
+	nn.LeakyReLU(0.2),
+	nn.Linear(32, out_dim),
+	nn.Softmax())

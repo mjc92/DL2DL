@@ -1,0 +1,10 @@
+main=nn.Sequential(
+	nn.Linear(input_dim,200),
+	nn.PReLU(),
+	nn.Linear(200,200),
+	nn.PReLU(),
+	nn.Linear(200,200),
+	nn.PReLU(),
+	nn.Linear(200,200),
+	nn.PReLU(),
+	nn.Linear(200,out_dim))

@@ -1,0 +1,9 @@
+net=nn.Sequential(
+	nn.Linear(x_dim,200),
+	nn.LeakyReLU(0.2),
+	nn.Linear(200,400),
+	nn.LeakyReLU(0.2),
+	nn.Linear(400,800),
+	nn.LeakyReLU(0.2),
+	nn.Linear(800,out_dim),
+	nn.Tanh())

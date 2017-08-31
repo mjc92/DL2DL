@@ -1,0 +1,10 @@
+model=nn.Sequential(
+	nn.Linear(input_dim,200),
+	nn.LeakyReLU(0.2),
+	nn.Linear(200,400),
+	nn.LeakyReLU(0.2),
+	nn.Linear(400,800),
+	nn.LeakyReLU(0.2),
+	nn.Linear(800,400),
+	nn.LeakyReLU(0.2),
+	nn.Linear(400,out_dim))

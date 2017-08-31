@@ -1,0 +1,7 @@
+model = nn.Sequential(
+	nn.Linear(input_dim, 800),
+	nn.LeakyReLU(0.2),
+	nn.Linear(200, 200),
+	nn.LeakyReLU(0.2),
+	nn.Linear(200, out_dim),
+	nn.Sigmoid())

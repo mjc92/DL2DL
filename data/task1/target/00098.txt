@@ -1,0 +1,11 @@
+model = nn.Sequential(
+	nn.Linear(x_dim, 100),
+	nn.ReLU(),
+	nn.Linear(100, 100),
+	nn.ReLU(),
+	nn.Linear(100, 100),
+	nn.ReLU(),
+	nn.Linear(100, 100),
+	nn.ReLU(),
+	nn.Linear(100, out_dim),
+	nn.Softmax())

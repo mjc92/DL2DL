@@ -1,0 +1,2 @@
+main=nn.Linear(x_dim,out_dim),
+	nn.Sigmoid())

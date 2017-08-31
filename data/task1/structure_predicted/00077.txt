@@ -1,0 +1,2 @@
+net=nn.Sequential(x_dim,16),
+	nn.Sigmoid())

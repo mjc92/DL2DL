@@ -1,0 +1,1 @@
+32 32 32 nn.PReLU nn.Softmax

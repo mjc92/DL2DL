@@ -1,0 +1,10 @@
+main = nn.Sequential(
+	nn.Linear(in_dim, 200),
+	nn.ELU(),
+	nn.Linear(200, 400),
+	nn.ELU(),
+	nn.Linear(400, 800),
+	nn.ELU(),
+	nn.Linear(800, 400),
+	nn.ELU(),
+	nn.Linear(400, out_dim))

@@ -1,0 +1,6 @@
+network = nn.Sequential(
+	nn.Linear(in_dim, 200),
+	nn.ELU(),
+	nn.Linear(100, 100),
+	nn.ELU(),
+	nn.Linear(100, out_dim))

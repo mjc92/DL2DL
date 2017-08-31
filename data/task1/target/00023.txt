@@ -1,0 +1,9 @@
+network = nn.Sequential(
+	nn.Linear(in_dim, 200),
+	nn.PReLU(),
+	nn.Linear(200, 400),
+	nn.PReLU(),
+	nn.Linear(400, 200),
+	nn.PReLU(),
+	nn.Linear(200, out_dim),
+	nn.Tanh())

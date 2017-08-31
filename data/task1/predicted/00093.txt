@@ -1,0 +1,7 @@
+model=nn.Sequential(
+	nn.Linear(in_dim,16),
+	nn.ReLU(),
+	nn.Linear(16,32),
+	nn.ReLU(),
+	nn.Linear(32,out_dim),
+	nn.Softmax())

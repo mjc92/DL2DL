@@ -1,0 +1,7 @@
+network = nn.Sequential(
+	nn.Linear(input_dim, 16),
+	nn.LeakyReLU(0.2),
+	nn.Linear(16, 16),
+	nn.LeakyReLU(0.2),
+	nn.Linear(16, out_dim),
+	nn.Tanh())

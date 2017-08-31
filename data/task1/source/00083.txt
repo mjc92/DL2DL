@@ -1,0 +1,8 @@
+model = nn.Sequential(
+	nn.Linear(x_dim, 16),
+	nn.ReLU(),
+	nn.Linear(64, 16),
+	nn.ReLU(),
+	nn.Linear(16, 16),
+	nn.ReLU(),
+	nn.Linear(16, out_dim))

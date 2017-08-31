@@ -1,0 +1,9 @@
+model = nn.Sequential(
+	nn.Linear(x_dim, 16),
+	nn.PReLU(),
+	nn.Linear(16, 32),
+	nn.PReLU(),
+	nn.Linear(32, 32),
+	nn.PReLU(),
+	nn.Linear(64, out_dim),
+	nn.Sigmoid())

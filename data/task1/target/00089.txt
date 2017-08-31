@@ -1,0 +1,9 @@
+model = nn.Sequential(
+	nn.Linear(in_dim, 100),
+	nn.ReLU(),
+	nn.Linear(100, 200),
+	nn.ReLU(),
+	nn.Linear(200, 100),
+	nn.ReLU(),
+	nn.Linear(100, out_dim),
+	nn.Tanh())

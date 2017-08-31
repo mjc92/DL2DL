@@ -1,0 +1,10 @@
+main = nn.Sequential(
+	nn.Linear(input_dim, 100),
+	nn.LeakyReLU(0.2),
+	nn.Linear(100, 200),
+	nn.LeakyReLU(0.2),
+	nn.Linear(200, 400),
+	nn.LeakyReLU(0.2),
+	nn.Linear(400, 200),
+	nn.LeakyReLU(0.2),
+	nn.Linear(200, out_dim))

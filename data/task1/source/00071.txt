@@ -1,0 +1,7 @@
+net = nn.Sequential(
+	nn.Linear(input_dim, 64),
+	nn.PReLU(),
+	nn.Linear(32, 64),
+	nn.PReLU(),
+	nn.Linear(64, out_dim),
+	nn.Tanh())

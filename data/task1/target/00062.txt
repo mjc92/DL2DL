@@ -1,0 +1,7 @@
+net = nn.Sequential(
+	nn.Linear(x_dim, 200),
+	nn.ELU(),
+	nn.Linear(200, 200),
+	nn.ELU(),
+	nn.Linear(200, out_dim),
+	nn.Tanh())

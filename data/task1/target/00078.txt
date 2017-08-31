@@ -1,0 +1,7 @@
+network = nn.Sequential(
+	nn.Linear(in_dim, 16),
+	nn.PReLU(),
+	nn.Linear(16, 16),
+	nn.PReLU(),
+	nn.Linear(16, out_dim),
+	nn.Softmax())

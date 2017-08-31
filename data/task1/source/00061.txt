@@ -1,0 +1,11 @@
+main = nn.Sequential(
+	nn.Linear(x_dim, 64),
+	nn.ReLU(),
+	nn.Linear(64, 128),
+	nn.ReLU(),
+	nn.Linear(256, 256),
+	nn.ReLU(),
+	nn.Linear(256, 128),
+	nn.ReLU(),
+	nn.Linear(128, out_dim),
+	nn.Softmax())

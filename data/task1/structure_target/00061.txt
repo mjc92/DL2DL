@@ -1,0 +1,1 @@
+64 128 256 128 nn.ReLU nn.Softmax

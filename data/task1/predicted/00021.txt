@@ -1,0 +1,10 @@
+main=nn.Sequential(
+	nn.Linear(input_dim,32),
+	nn.ReLU(),
+	nn.Linear(32,64),
+	nn.ReLU(),
+	nn.Linear(64,128),
+	nn.ReLU(),
+	nn.Linear(128,64),
+	nn.ReLU(),
+	nn.Linear(64,out_dim))

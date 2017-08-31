@@ -1,0 +1,2 @@
+model=nn.Sequential(),
+	nn.Linear(32,out_dim))

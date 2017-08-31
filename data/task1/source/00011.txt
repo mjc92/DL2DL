@@ -1,0 +1,9 @@
+net = nn.Sequential(
+	nn.Linear(in_dim, 64),
+	nn.PReLU(),
+	nn.Linear(64, 64),
+	nn.PReLU(),
+	nn.Linear(128, 64),
+	nn.PReLU(),
+	nn.Linear(64, out_dim),
+	nn.Sigmoid())

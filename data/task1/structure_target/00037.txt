@@ -1,0 +1,1 @@
+128 256 512 256 nn.ReLU nn.Sigmoid

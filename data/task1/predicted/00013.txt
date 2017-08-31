@@ -1,0 +1,8 @@
+main=nn.Sequential(
+	nn.Linear(x_dim,16),
+	nn.ELU(),
+	nn.Linear(16,32),
+	nn.ELU(),
+	nn.Linear(32,16),
+	nn.ELU(),
+	nn.Linear(16,out_dim))

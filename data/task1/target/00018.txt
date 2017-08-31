@@ -1,0 +1,7 @@
+main = nn.Sequential(
+	nn.Linear(input_dim, 100),
+	nn.LeakyReLU(0.2),
+	nn.Linear(100, 100),
+	nn.LeakyReLU(0.2),
+	nn.Linear(100, out_dim),
+	nn.Softmax())
